@@ -6,9 +6,9 @@ import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import javax.xml.bind.DatatypeConverter;
-
 import com.buschmais.jqassistant.plugin.common.api.model.MD5Descriptor;
+
+import org.apache.commons.codec.binary.Hex;
 
 /**
  * A delegate around reading input streams for calculating a MD5 hash sum.
@@ -17,7 +17,7 @@ public class MD5DigestDelegate {
 
     /**
      * Defines the read operation to execute.
-     * 
+     *
      * @param <D>
      *            The MD5 descriptor type.
      */
@@ -25,7 +25,7 @@ public class MD5DigestDelegate {
 
         /**
          * Execute the operation.
-         * 
+         *
          * @param inputStream
          *            The input stream to use for calculating the MD5 hash sum.
          * @return The MD5 descriptor.
@@ -53,7 +53,7 @@ public class MD5DigestDelegate {
 
     /**
      * Return the singleton instance.
-     * 
+     *
      * @return The instance.
      */
     public static MD5DigestDelegate getInstance() {
@@ -63,7 +63,7 @@ public class MD5DigestDelegate {
     /**
      * Calculate the MD5 hash sum for the given input stream using the given
      * operation.
-     * 
+     *
      * @param stream
      *            The stream.
      * @param digestOperation
@@ -77,7 +77,7 @@ public class MD5DigestDelegate {
     public <D extends MD5Descriptor> D digest(InputStream stream, DigestOperation<D> digestOperation) throws IOException {
         DigestInputStream digestInputStream = new DigestInputStream(stream, md5Digest);
         D md5Descriptor = digestOperation.execute(digestInputStream);
-        String md5 = DatatypeConverter.printHexBinary(md5Digest.digest());
+        String md5 = Hex.encodeHexString(md5Digest.digest());
         md5Descriptor.setMd5(md5);
         return md5Descriptor;
     }
